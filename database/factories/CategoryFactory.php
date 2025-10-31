@@ -37,7 +37,7 @@ class CategoryFactory extends Factory
 
         return [
             // Ensure category name is unique
-            'name' => fake()->unique()->randomElement($categories) . ' ' . fake()->randomNumber(2, true),
+            'name' => fake()->unique()->words(2, true),
         ];
     }
 }
