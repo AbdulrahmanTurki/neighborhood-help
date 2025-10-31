@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -21,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role', // Added to support 'user' and 'admin' roles
     ];
 
     /**
@@ -46,16 +48,36 @@ class User extends Authenticatable
         ];
     }
 
-    public function posts() {
-        return $this->hasMany(Post::class);
+    /**
+     * A User can have many help requests/offers (posts).
+     */
+    public function helpRequests(): HasMany
+    {
+        return $this->hasMany(HelpRequest::class, 'user_id');
     }
 
-    public function profile() {
+    /**
+     * A User has one Profile.
+     */
+    public function profile(): HasOne
+    {
         return $this->hasOne(Profile::class);
     }
 
-    public function comments() {
+    /**
+     * A User can have many comments.
+     */
+    public function comments(): HasMany
+    {
         return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * Check if the user is an admin.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin'; // Based on the definition: 'Admin: 1 initial default account...'
     }
 
 }
