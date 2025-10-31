@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany; // Added import for many-to-many
+use Illuminate\Database\Eloquent\Relations\BelongsToMany; 
 
 
 class User extends Authenticatable
@@ -24,7 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', // Added to support 'user' and 'admin' roles
+        'role', 
     ];
 
     /**
@@ -87,7 +87,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin'; // Based on the definition: 'Admin: 1 initial default account...'
+        return $this->role === 'admin';
     }
 
 }

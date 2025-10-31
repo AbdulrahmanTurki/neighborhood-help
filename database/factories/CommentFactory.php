@@ -27,11 +27,11 @@ class CommentFactory extends Factory
     public function definition(): array
     {
         return [
-            // Foreign Keys
+           
             'user_id' => User::factory(),
             'help_request_id' => HelpRequest::factory(),
 
-            // Content
+            
             'body' => fake()->realText(150),
         ];
     }

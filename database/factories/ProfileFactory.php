@@ -25,8 +25,7 @@ class ProfileFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            // Associate with an existing or new User
+        return [        
             'user_id' => User::factory(), 
             
             'bio' => fake()->realText(200),

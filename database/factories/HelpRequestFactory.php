@@ -45,16 +45,15 @@ class HelpRequestFactory extends Factory
         }
 
         return [
-            // Foreign Keys
+            
             'user_id' => User::factory(),
-            // Assuming categories exist, use random or create a new one
+            
             'category_id' => Category::factory(), 
 
-            // Content
+            
             'title' => fake()->randomElement($titles),
             'body' => fake()->paragraph(5),
             
-            // Attributes
             'type' => $type,
             'status' => fake()->randomElement(['open', 'in_progress', 'completed']),
         ];

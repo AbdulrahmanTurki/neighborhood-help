@@ -32,7 +32,7 @@ class Comment extends Model
      */
     public function helpRequest(): BelongsTo
     {
-        // Assuming the foreign key in the 'comments' table is 'help_request_id'
+        
         return $this->belongsTo(HelpRequest::class);
     }
 }

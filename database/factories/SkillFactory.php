@@ -35,7 +35,7 @@ class SkillFactory extends Factory
             'Babysitting',
         ];
 
-        // We use 'unique()' here because a finite set of unique skill records must be created first.
+        
         return [
             'name' => fake()->unique()->randomElement($skills),
         ];

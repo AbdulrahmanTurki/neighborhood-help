@@ -20,7 +20,7 @@ class HelpRequest extends Model
         'category_id',
         'title',
         'body',
-        // 'type', // e.g., 'request' or 'offer' if you decide to implement this in the migration
+        
     ];
 
     /**

@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Pivot table for the User <-> Skill relationship (many-to-many)
+        
         Schema::create('skill_user', function (Blueprint $table) {
             
-            // Defines the composite primary key using the IDs of the two related models
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('skill_id')->constrained('skills')->cascadeOnDelete();
 
-            // Set both foreign keys as the composite primary key to enforce uniqueness
             $table->primary(['user_id', 'skill_id']);
 
             $table->timestamps();

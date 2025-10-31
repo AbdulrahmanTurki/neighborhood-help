@@ -36,7 +36,7 @@ class CategoryFactory extends Factory
         ];
 
         return [
-            // Ensure category name is unique
+           
             'name' => fake()->unique()->words(2, true),
         ];
     }

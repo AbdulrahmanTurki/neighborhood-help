@@ -24,7 +24,6 @@ class Skill extends Model
      */
     public function users(): BelongsToMany
     {
-        // Pivot table assumed: skill_user
         return $this->belongsToMany(User::class);
     }
 }

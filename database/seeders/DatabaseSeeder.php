@@ -8,13 +8,13 @@ use App\Models\Category;
 use App\Models\HelpRequest;
 use App\Models\Comment;
 use App\Models\Profile;
-use App\Models\Skill; // Added import for Skill model
+use App\Models\Skill; 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
-    // Important: Use WithoutModelEvents to prevent unwanted side effects if listeners are present.
+    
     use WithoutModelEvents; 
 
     /**
@@ -22,11 +22,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Create Users
+        
         $admin = User::create([
             'name' => 'Admin Moderator',
             'email' => 'admin@helpout.com',
-            'password' => Hash::make('password'), // You should change this password immediately in a real app
+            'password' => Hash::make('password'), 
             'role' => 'admin',
         ]);
 
@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'user',
         ]);
         
-        // 2. Create Profiles
+        
         Profile::create([
             'user_id' => $admin->id,
             'bio' => 'Platform administrator and community manager. Ready to help with moderation and technical issues.',
@@ -64,15 +64,13 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        // 3. Create Categories
+        
         $category_moving = Category::create(['name' => 'Moving & Lifting']);
         $category_pets = Category::create(['name' => 'Pet Care']);
         $category_tutoring = Category::create(['name' => 'Education & Tutoring']);
         $category_chores = Category::create(['name' => 'Yard Work & Chores']);
         
-        // 4. Create Help Requests (Posts)
-        
-        // Post 1 (Request - from Alice)
+       
         $request_moving = HelpRequest::create([
             'user_id' => $user_alice->id,
             'category_id' => $category_moving->id,
@@ -82,7 +80,7 @@ class DatabaseSeeder extends Seeder
             'status' => 'open',
         ]);
 
-        // Post 2 (Offer - from Bob)
+       
         $offer_tutoring = HelpRequest::create([
             'user_id' => $user_bob->id,
             'category_id' => $category_tutoring->id,
@@ -92,7 +90,7 @@ class DatabaseSeeder extends Seeder
             'status' => 'open',
         ]);
         
-        // Post 3 (Request - from Alice, with a comment)
+        
         $request_pet_care = HelpRequest::create([
             'user_id' => $user_alice->id,
             'category_id' => $category_pets->id,
@@ -102,25 +100,42 @@ class DatabaseSeeder extends Seeder
             'status' => 'in_progress',
         ]);
         
-        // 5. Create Comments on the Pet Care post
+        
         Comment::create([
-            'user_id' => $user_bob->id, // Bob comments on Alice's post
+            'user_id' => $user_bob->id, 
             'help_request_id' => $request_pet_care->id,
             'body' => 'I\'d love to help out with your golden retriever! I live right on Oak Avenue and can easily do 8 am and 5 pm walks. Let me know if you are interested!',
         ]);
 
         Comment::create([
-            'user_id' => $admin->id, // Admin comments (just showing visibility/use case)
+            'user_id' => $admin->id, 
             'help_request_id' => $request_pet_care->id,
             'body' => 'Great to see neighbors helping neighbors! This is what HelpOut is all about.',
         ]);
     
-        // 6. Create Skills and attach to users <--- NEW LOGIC START
-        $skill_plumbing = Skill::firstOrCreate(['name' => 'Basic Plumbing']);
-        $skill_dog_walking = Skill::firstOrCreate(['name' => 'Dog Walking']);
-        $skill_math_tutoring = Skill::firstOrCreate(['name' => 'Math Tutoring']);
-        $skill_heavy_lifting = Skill::firstOrCreate(['name' => 'Heavy Lifting']);
-        $skill_tech_support = Skill::firstOrCreate(['name' => 'Technical Support']);
+        $skill_plumbing = Skill::create(['name' => 'Basic Plumbing']); 
+        $skill_dog_walking = Skill::create(['name' => 'Dog Walking']);
+        $skill_math_tutoring = Skill::create(['name' => 'Math Tutoring']);
+        $skill_heavy_lifting = Skill::create(['name' => 'Heavy Lifting']);
+        $skill_tech_support = Skill::create(['name' => 'Technical Support']);
+
+       
+        $additional_skills = collect([
+            Skill::create(['name' => 'Light Carpentry']),
+            Skill::create(['name' => 'Gardening/Lawn Care']),
+            Skill::create(['name' => 'Babysitting']),
+            Skill::create(['name' => 'Home Repairs']),
+            Skill::create(['name' => 'Errands Runner']),
+        ]);
+
+        
+        $all_skills = collect([
+            $skill_plumbing,
+            $skill_dog_walking,
+            $skill_math_tutoring,
+            $skill_heavy_lifting,
+            $skill_tech_support,
+        ])->merge($additional_skills); 
 
         $user_alice->skills()->attach($skill_math_tutoring);
         $user_alice->skills()->attach($skill_heavy_lifting);
@@ -129,24 +144,22 @@ class DatabaseSeeder extends Seeder
         $user_bob->skills()->attach($skill_heavy_lifting);
         $user_bob->skills()->attach($skill_plumbing);
         
-        $admin->skills()->attach($skill_tech_support); // Admin has tech skills
+        $admin->skills()->attach($skill_tech_support);
         
-        // Also create an additional 5 random skills to populate the table further
-        Skill::factory(5)->create();
-
         // Using Factories.
         User::factory(50)
             ->has(Profile::factory())
-            // Attach between 0 and 3 skills to random users from all available skills
+            
             ->hasAttached(
-                Skill::inRandomOrder()->limit(rand(0, 3)),
+                $all_skills->random(rand(0, $all_skills->count())), 
                 function () {
-                    return []; // No extra pivot data needed
+                    return []; 
                 },
-                'skills' // The relationship name on the User model
+                'skills' 
             )
             ->create();
-        // <--- NEW LOGIC END
+        
+        
 
         Category::factory(5)->create();
 
