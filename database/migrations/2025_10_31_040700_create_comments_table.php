@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            
+            // Foreign Keys
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete(); // Author of the comment
+            $table->foreignId('help_request_id')->constrained()->cascadeOnDelete(); // The post the comment is on
+            
+            // Comment content
+            $table->text('body');
+
             $table->timestamps();
         });
     }

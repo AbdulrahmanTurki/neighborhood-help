@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
+            // Foreign Key to users table (One-to-One relationship)
+            $table->foreignId('user_id')->unique()->constrained()->cascadeOnDelete(); // Ensures only one profile per user
+            
+            // Additional profile fields (e.g., for location, bio)
+            $table->text('bio')->nullable();
+            $table->string('location')->nullable(); 
+
             $table->timestamps();
         });
     }
