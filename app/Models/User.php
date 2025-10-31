@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany; // Added import for many-to-many
 
 
 class User extends Authenticatable
@@ -47,6 +48,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * A User can have many Skills.
+     */
+    public function skills(): BelongsToMany // New method for the many-to-many relationship
+    {
+        return $this->belongsToMany(Skill::class);
     }
 
     /**

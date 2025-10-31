@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\HelpRequest;
 use App\Models\Comment;
 use App\Models\Profile;
+use App\Models\Skill; // Added import for Skill model
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -114,10 +115,38 @@ class DatabaseSeeder extends Seeder
             'body' => 'Great to see neighbors helping neighbors! This is what HelpOut is all about.',
         ]);
     
+        // 6. Create Skills and attach to users <--- NEW LOGIC START
+        $skill_plumbing = Skill::firstOrCreate(['name' => 'Basic Plumbing']);
+        $skill_dog_walking = Skill::firstOrCreate(['name' => 'Dog Walking']);
+        $skill_math_tutoring = Skill::firstOrCreate(['name' => 'Math Tutoring']);
+        $skill_heavy_lifting = Skill::firstOrCreate(['name' => 'Heavy Lifting']);
+        $skill_tech_support = Skill::firstOrCreate(['name' => 'Technical Support']);
+
+        $user_alice->skills()->attach($skill_math_tutoring);
+        $user_alice->skills()->attach($skill_heavy_lifting);
+        
+        $user_bob->skills()->attach($skill_dog_walking);
+        $user_bob->skills()->attach($skill_heavy_lifting);
+        $user_bob->skills()->attach($skill_plumbing);
+        
+        $admin->skills()->attach($skill_tech_support); // Admin has tech skills
+        
+        // Also create an additional 5 random skills to populate the table further
+        Skill::factory(5)->create();
+
         // Using Factories.
         User::factory(50)
             ->has(Profile::factory())
+            // Attach between 0 and 3 skills to random users from all available skills
+            ->hasAttached(
+                Skill::inRandomOrder()->limit(rand(0, 3)),
+                function () {
+                    return []; // No extra pivot data needed
+                },
+                'skills' // The relationship name on the User model
+            )
             ->create();
+        // <--- NEW LOGIC END
 
         Category::factory(5)->create();
 
