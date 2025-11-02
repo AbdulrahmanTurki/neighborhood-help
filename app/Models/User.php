@@ -49,7 +49,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
     /**
      * A User can have many Skills.
      */
@@ -57,7 +56,6 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Skill::class);
     }
-
     /**
      * A User can have many help requests/offers (posts).
      */
@@ -73,7 +71,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(Profile::class);
     }
-
     /**
      * A User can have many comments.
      */
@@ -81,7 +78,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
-
     /**
      * Check if the user is an admin.
      */
@@ -89,5 +85,4 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
-
 }
